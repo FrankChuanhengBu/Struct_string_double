@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <string.h>
+#define CSIZE 4
+#define SLEN 16
+
+struct name {
+	char fname[SLEN];
+	char lname[SLEN];
+};
+
+struct student {
+	struct name n;
+	double grades[3];
+	double average;
+};
+
+void aver_score(struct student *);
+void printinfo(const struct student *);
+void aver_class(const struct student *);
+
+int main(void) {
+	struct student students[CSIZE] = {
+		{.n.fname = "Bob", 
+		.n.lname = "1st"
+			},
+		{.n.fname = "Alex",
+		.n.lname = "2nd"
+			},
+		{.n.fname = "Anna",
+		.n.lname = "3rd" 
+			},
+		{.n.fname = "Peter",
+		.n.lname = "4th"
+			}	
+	};
+	
+	int i, j;
+	char first[SLEN];
+	char last[SLEN];
+	double score;
+	
+	for (i = 0; i < CSIZE; i++) {
+		printf("Please enter the first and last name of student No.%d:\n", i+1);
+		scanf("%s %s", first, last);
+		while (getchar() != '\n')
+			continue;
+		for (j = 0; j < CSIZE; j++){
+			if (strcmp(first, students[j].n.fname) == 0 && strcmp(last, students[j].n.lname) == 0) {
+				printf("Please enter his or her 3 grades:\n");
+				scanf("%lf %lf %lf", &students[j].grades[0], &students[j].grades[1], &students[j].grades[2]);
+				while (getchar() != '\n')
+					continue;
+				break;
+			}
+		}
+	}
+	aver_score(students);
+	
+	printinfo(students); 
+	
+	aver_class(students);
+	
+	return 0;
+}
+
+void aver_score(struct student * students) {
+	int i;
+	
+	for (i=0; i<CSIZE; i++) {
+		students[i].average = (students[i].grades[0] + students[i].grades[1] + students[i].grades[2]) / 3;
+	}
+}
+
+void printinfo(const struct student * students) {
+	int i;
+	
+	for (i=0; i<CSIZE; i++) {
+		printf("Student Name: %s %s\n", students[i].n.fname, students[i].n.lname);
+		printf("Grades: %lf  %lf  %lf\n", students[i].grades[0], students[i].grades[1], students[i].grades[2]);
+		printf("Average grade: %.2lf\n\n", students[i].average);
+	}
+}
+
+void aver_class(const struct student * students) {
+	double sum;
+	int i;
+	
+	for (i=0; i<CSIZE; i++) {
+		sum += students[i].average;
+	}
+	
+	printf("Average grade of the class: %.2lf", sum / CSIZE);
+}
